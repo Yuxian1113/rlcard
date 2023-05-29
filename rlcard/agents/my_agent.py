@@ -1,4 +1,5 @@
 import numpy as np
+import os
 import random
 import tensorflow as tf
 import torch
@@ -37,7 +38,17 @@ class DQN(nn.Module):
 
 	def forward(self, x):
 		return self.net(x.float())
+	
+	def save_checkpoint(self, model_dir: str):
+		if not os.path.exists(model_dir):
+			os.makedirs(model_dir)
+		torch.save(self, os.path.join(model_dir, 'dqn.pt'))
 
+	def load_checkpoint(self, model_dir: str):
+		if not os.path.exists(os.path.join(model_dir, 'dqn.pt')):
+			raise FileNotFoundError(f"The model '{path}' does not exist.")
+		checkpoint = torch.load(os.path.join(model_dir, 'dqn.pt'))
+		self.load_state_dict(checkpoint.state_dict())
 
 class MyAgent(object):
 	def __init__(self,
@@ -127,3 +138,8 @@ class MyAgent(object):
 		if self.train_done>0 and self.train_done%self.target_update_period==0:
 			self.target_net.load_state_dict(self.policy_net.state_dict())
 
+	def save_checkpoint(self, model_dir: str):
+		self.policy_net.save_checkpoint(model_dir)
+	
+	def load_checkpoint(self, model_dir: str):
+		self.policy_net.load_checkpoint(model_dir)

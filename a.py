@@ -34,8 +34,8 @@ env.set_agents([my_agent, random_agent, random_agent2])
 for episode in range(300):
 	print(">> Start a new game")
 
-	trajectories, payoffs = env.run(is_training=False)
-	tr =reorganize(trajectories, payoffs)
+	trajectories, payoffs = env.run(is_training=True)
+	tr = reorganize(trajectories, payoffs)
 	for ts in tr[0]:
 		state, action, reward, next_state, done = tuple(ts)
 		my_agent.feed_buffer(state['obs'], action, reward, next_state['obs'], next_state['legal_actions'], done)
@@ -64,4 +64,6 @@ for episode in range(300):
 		print('You lose {} chips!'.format(-payoffs[0]))
 	print('')
 	print(payoffs)
+
+	my_agent.save_checkpoint('./ckpt')
 
