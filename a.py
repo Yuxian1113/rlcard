@@ -17,21 +17,20 @@ import seaborn as sns
 env = rlcard.make(
 	'no-limit-holdem',
 	config={
-		'seed': 42,
-		'game_players_num':3
+		'game_num_players':3
 	}
 )
-print(env.num_players)
 
-set_seed(42)
 
 my_agent = MyAgent(
 	num_actions = env.num_actions,
 	num_obs = 54
 	)
-random_agent = RandomAgent(num_actions=env.num_actions)
-random_agent2 = RandomAgent(num_actions=env.num_actions)
-env.set_agents([my_agent, random_agent, random_agent2])
+agent = RandomAgent(num_actions=env.num_actions)
+agents = [my_agent]
+for i in range(env.num_players-1):
+    agents.append(agent)
+env.set_agents(agents)
 
 x_axis = []
 y_axis = []
@@ -54,7 +53,7 @@ for episode in tqdm(range(n_episode)):
 	action_record = final_state['action_record']
 	state = final_state['raw_obs']
 	_action_list = []
-	'''
+'''        
 	for i in range(1, len(action_record)+1):
 		if action_record[-i][0] == state['current_player']:
 			break
@@ -75,7 +74,6 @@ for episode in tqdm(range(n_episode)):
 	else:
 		print('You lose {} chips!'.format(-payoffs[0]))
 	print('')
-	'''
 	avg_payoff += payoffs[0]
 	avg_rand_payoff += payoffs[1]
 	if episode % logging_steps == 0:
@@ -85,9 +83,10 @@ for episode in tqdm(range(n_episode)):
 		avg_payoff = 0
 		avg_rand_payoff = 0
 	my_agent.save_checkpoint('./ckpt')
-
+'''
 sns.lineplot(x=x_axis, y=y_axis, legend='brief', label='DQN')
 sns.lineplot(x=x_axis, y=y_rand_axis, legend='brief', label='Random')
+
 plt.xlabel('episode')
 plt.ylabel('payoff')
 plt.savefig('payoff3.png')
