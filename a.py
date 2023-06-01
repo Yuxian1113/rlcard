@@ -53,7 +53,6 @@ for episode in tqdm(range(n_episode)):
 	action_record = final_state['action_record']
 	state = final_state['raw_obs']
 	_action_list = []
-'''        
 	for i in range(1, len(action_record)+1):
 		if action_record[-i][0] == state['current_player']:
 			break
@@ -90,3 +89,4 @@ sns.lineplot(x=x_axis, y=y_rand_axis, legend='brief', label='Random')
 plt.xlabel('episode')
 plt.ylabel('payoff')
 plt.savefig('payoff3.png')
+'''
