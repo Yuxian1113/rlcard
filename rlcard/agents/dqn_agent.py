@@ -94,6 +94,7 @@ class DQNAgent(object):
         self.batch_size = batch_size
         self.num_actions = num_actions
         self.train_every = train_every
+        self.use_raw = False
 
         # Torch device
         if device is None:

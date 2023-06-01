@@ -37,7 +37,7 @@ y_axis = []
 y_rand_axis = []
 avg_payoff, avg_rand_payoff = 0, 0
 
-n_episode = 1000
+n_episode = 1000000
 n_logging = 50
 logging_steps = n_episode // n_logging
 
